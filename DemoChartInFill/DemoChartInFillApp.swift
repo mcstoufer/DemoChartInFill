@@ -16,8 +16,8 @@ struct DemoChartInFillApp: App {
             threshold: model.threshold
         )
         WindowGroup {
-            ContentViewRectangleFill(grouping: grouping)
-//            ContentViewAreaFill(grouping: grouping)
+//            ContentViewRectangleFill(grouping: grouping)
+            ContentViewAreaFill(grouping: grouping)
         }
     }
 }

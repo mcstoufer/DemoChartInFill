@@ -30,17 +30,23 @@ struct ContentViewAreaFill: View {
                 // rectangle, so per-point coloring works (AreaMark applies one
                 // color to the entire series, which breaks at crossing points).
                 ForEach(areaFill) { entry in
-                    RectangleMark(
-                        xStart: .value("Date", entry.measured.date),
-                        xEnd: .value("Date", entry.nextDate),
-                        yStart: .value("Size in \(scale)", entry.measuredScaled),
-                        yEnd: .value("Size in \(scale)", entry.thresholdScaled)
-                    )
-                    .foregroundStyle(
-                        entry.isOver
-                        ? .red.opacity(0.20)
-                        : .green.opacity(0.20)
-                    )
+                    // Measured is under Threshold
+                   AreaMark(
+                       x: .value("Date", entry.measured.date),
+                       yStart: .value("Start", entry.measuredScaled),
+                       yEnd: .value("End", entry.maxValue)
+                   )
+                   .foregroundStyle(by: .value("IsUnder", entry.isUnder))
+                   .interpolationMethod(.stepStart)
+
+                   // Measured is over Threshold
+                   AreaMark(
+                       x: .value("Date", entry.measured.date),
+                       yStart: .value("Start", entry.thresholdScaled),
+                       yEnd: .value("End", entry.maxValue)
+                   )
+                   .foregroundStyle(by: .value("IsOver", entry.isOver))
+                   .interpolationMethod(.stepStart)
                 }
 
                 // --- Measured line (Stepwise) ---
@@ -71,6 +77,11 @@ struct ContentViewAreaFill: View {
                     .symbolSize(16)
                 }
             }
+            .chartForegroundStyleScale([
+                "over": .red.opacity(0.2),
+                "under": .green.opacity(0.2),
+                "not": .clear
+            ])
             .chartPlotStyle { plotArea in
                 plotArea
                     .background(Color(nsColor: .controlBackgroundColor))

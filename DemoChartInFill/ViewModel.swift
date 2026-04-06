@@ -11,11 +11,33 @@ struct AreaFillEntry: Identifiable {
     let measured: SizeRegistryEntry
     let thresholdScaled: Double
     let measuredScaled: Double
+    let isOver: String
+    let isUnder: String
 
     /// The date of the next measured point — defines the right edge of this entry's rectangle.
     let nextDate: Date
 
-    var isOver: Bool { measuredScaled > thresholdScaled }
+    var isOverThreshold: Bool { measuredScaled > thresholdScaled }
+
+    var maxValue: Double {
+        return max(measuredScaled, thresholdScaled)
+    }
+    
+    init(
+        id: UUID,
+        measured: SizeRegistryEntry,
+        thresholdScaled: Double,
+        measuredScaled: Double,
+        nextDate: Date
+    ) {
+        self.id = id
+        self.measured = measured
+        self.thresholdScaled = thresholdScaled
+        self.measuredScaled = measuredScaled
+        isOver = measuredScaled > thresholdScaled ? "over" : "not"
+        isUnder = measuredScaled < thresholdScaled ? "under" : "not"
+        self.nextDate = nextDate
+    }
 }
 
 public struct SizeRegistryGrouping {

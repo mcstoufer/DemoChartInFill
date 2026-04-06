@@ -29,7 +29,7 @@ struct ContentViewRectangleFill: View {
                         yEnd: .value("Size in \(scale)", entry.thresholdScaled)
                     )
                     .foregroundStyle(
-                        entry.isOver
+                        entry.isOverThreshold
                         ? .red.opacity(0.20)
                         : .green.opacity(0.20)
                     )
